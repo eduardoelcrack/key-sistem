@@ -1,11 +1,12 @@
-app.get("/", (req, res) => {
-    res.send("API funcionando 🔥");
-});
-
 const express = require("express");
 const app = express();
 
 let keys = {};
+
+// ruta inicio (PRUEBA)
+app.get("/", (req, res) => {
+    res.send("API funcionando 🔥");
+});
 
 // generar key
 app.get("/getkey", (req, res) => {
