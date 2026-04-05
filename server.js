@@ -7,7 +7,7 @@ let keys = {};
 const permanentKey = "RATAHUB-J4Y0330M7WDO4AH4KD6";
 
 // ✅ VERSION ACTUAL — cuando quieras que todos actualicen, cambia esto
-const CURRENT_VERSION = "1.0";
+const CURRENT_VERSION = "1.1";
 
 function generateKey() {
     let random = Math.random().toString(36).substring(2, 8).toUpperCase();
