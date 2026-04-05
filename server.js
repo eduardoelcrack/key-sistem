@@ -3,43 +3,46 @@ const app = express();
 
 let keys = {};
 
-// 🔑 KEY PERMANENTE (cámbiala si quieres)
+// 🔑 KEY PERMANENTE
 const permanentKey = "RATAHUB-J4Y0330M7WDO4AH4KD6";
 
-// función para generar key con formato
+// ✅ VERSION ACTUAL — cuando quieras que todos actualicen, cambia esto
+const CURRENT_VERSION = "1.0";
+
 function generateKey() {
     let random = Math.random().toString(36).substring(2, 8).toUpperCase();
     return "RATAHUB-" + random;
 }
 
-// ruta inicio
 app.get("/", (req, res) => {
     res.send("API funcionando 🔥");
 });
 
-// generar key temporal
 app.get("/getkey", (req, res) => {
     let key = generateKey();
-    let expires = Date.now() + (24 * 60 * 60 * 1000); // 24 horas
-
+    let expires = Date.now() + (24 * 60 * 60 * 1000);
     keys[key] = expires;
-
     res.send("Tu key es: " + key);
 });
 
-// verificar key
 app.get("/check", (req, res) => {
-    let key = req.query.key;
+    let key     = req.query.key;
+    let version = req.query.version;
 
-    // ✅ key permanente
+    // verificar version primero
+    if (version && version !== CURRENT_VERSION) {
+        return res.send("outdated");
+    }
+
+    // key permanente
     if (key === permanentKey) {
         return res.send("valid");
     }
 
-    // ❌ no existe
+    // no existe
     if (!keys[key]) return res.send("invalid");
 
-    // ⏱️ expiración
+    // expirada
     if (Date.now() > keys[key]) {
         delete keys[key];
         return res.send("expired");
@@ -49,7 +52,6 @@ app.get("/check", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
     console.log("Servidor listo");
 });
